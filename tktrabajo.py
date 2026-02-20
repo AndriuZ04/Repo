@@ -143,10 +143,10 @@ def eliminar_movimiento():
     # Mostrar lista numerada en una ventana
     ventana_elim = tk.Toplevel()
     ventana_elim.title("Eliminar movimiento")
-    ventana_elim.geometry("600x400")
+    ventana_elim.geometry("600x500")
     
     tk.Label(ventana_elim, text="Selecciona el número del movimiento a eliminar:", 
-             font=("Arial", 12, "bold")).pack(pady=10)
+             font=("Arial", 16, "bold")).pack(pady=12)
     
     texto = tk.Text(ventana_elim, font=("Consolas", 11), height=15)
     texto.pack(padx=15, pady=10, fill="both", expand=True)
@@ -184,8 +184,8 @@ def eliminar_movimiento():
         except ValueError:
             messagebox.showerror("Error", "Ingresa un número válido.")
     
-    tk.Button(ventana_elim, text="Eliminar seleccionado", bg="#dc3545", fg="white", 
-              command=borrar_seleccionado).pack(pady=15)
+    tk.Button(ventana_elim, text="Eliminar seleccionado", bg="#d62638", fg="white", 
+              command=borrar_seleccionado).pack(pady=18)
     
 def borrar_todo():
     global monto, registros
@@ -246,13 +246,10 @@ def iniciar_contador():
     tk.Button(frame_botones, text="1. Ingresar", font=("Arial", 11, "bold"), bg="#28a745", fg="white", width=14, command=ingresar).grid(row=0, column=0, padx=10, pady=8)
     tk.Button(frame_botones, text="2. Retirar",   font=("Arial", 11, "bold"), bg="#dc3545", fg="white", width=14, command=retirar).grid(row=0, column=1, padx=10, pady=8)
     tk.Button(frame_botones, text="3. Ver reporte", font=("Arial", 11, "bold"), bg="#6c757d", fg="white", width=14, command=ver_movimientos).grid(row=1, column=0, columnspan=2, pady=8)
-    tk.Button(frame_botones, text="4. Salir",     font=("Arial", 11, "bold"), bg="#343a40", fg="white", width=14, command=salir).grid(row=2, column=0, columnspan=2, pady=8)
-    tk.Button(frame_botones, text="5. Eliminar movimiento", font=("Arial", 11, "bold"), 
-          bg="#ff9800", fg="white", width=20, command=eliminar_movimiento)\
-    .grid(row=3, column=0, columnspan=2, pady=8)
-    tk.Button(frame_botones, text="6. Borrar todo", font=("Arial", 11, "bold"), 
-          bg="#f44336", fg="white", width=20, command=borrar_todo)\
-    .grid(row=4, column=0, columnspan=2, pady=8)
+    tk.Button(frame_botones, text="4. Eliminar movimiento", font=("Arial", 11, "bold"), bg="#ff9800", fg="white", width=20, command=eliminar_movimiento).grid(row=2, column=0, columnspan=2, pady=8)
+    tk.Button(frame_botones, text="5. Borrar todo", font=("Arial", 11, "bold"), bg="#f44336", fg="white", width=20, command=borrar_todo).grid(row=3, column=0, columnspan=2, pady=8)
+    tk.Button(frame_botones, text="6. Salir", font=("Arial", 11, "bold"), bg="#343a40", fg="white", width=14, command=salir).grid(row=4, column=0, columnspan=2, pady=8)
+
     actualizar_saldo()
     ventana.protocol("WM_DELETE_WINDOW", salir)  # guarda si cierra con la X
     ventana.mainloop()
