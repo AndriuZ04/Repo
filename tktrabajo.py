@@ -103,6 +103,106 @@ def ver_movimientos():
     texto_widget.config(state="disabled")
     texto_widget.pack(padx=15, pady=10, fill="both", expand=True)
 
+def pedir_contrasena():
+    """Ventana pequeña para pedir contraseña y verificarla"""
+    ventana_pass = tk.Toplevel()
+    ventana_pass.title("Verificar contraseña")
+    ventana_pass.geometry("350x180")
+    ventana_pass.configure(bg="#f8f9fa")
+    
+    tk.Label(ventana_pass, text="Ingresa tu contraseña para confirmar:", 
+             font=("Arial", 12), bg="#f8f9fa").pack(pady=15)
+    
+    entry_pass = tk.Entry(ventana_pass, font=("Arial", 12), width=20, show="*")
+    entry_pass.pack(pady=10)
+    
+    resultado = [False]  # lista para poder modificar desde adentro
+    
+    def verificar():
+        if entry_pass.get() == CONTRASENA_CORRECTA:
+            resultado[0] = True
+            ventana_pass.destroy()
+        else:
+            messagebox.showerror("Error", "Contraseña incorrecta")
+            ventana_pass.destroy()
+    
+    tk.Button(ventana_pass, text="Confirmar", font=("Arial", 11, "bold"), 
+              bg="#0066cc", fg="white", command=verificar).pack(pady=10)
+    
+    ventana_pass.wait_window()  # espera hasta que se cierre
+    return resultado[0]
+
+def eliminar_movimiento():
+    if not registros:
+        messagebox.showinfo("Información", "No hay movimientos para eliminar.")
+        return
+    
+    if not pedir_contrasena():
+        return  # si contraseña mala → salir
+    
+    # Mostrar lista numerada en una ventana
+    ventana_elim = tk.Toplevel()
+    ventana_elim.title("Eliminar movimiento")
+    ventana_elim.geometry("600x400")
+    
+    tk.Label(ventana_elim, text="Selecciona el número del movimiento a eliminar:", 
+             font=("Arial", 12, "bold")).pack(pady=10)
+    
+    texto = tk.Text(ventana_elim, font=("Consolas", 11), height=15)
+    texto.pack(padx=15, pady=10, fill="both", expand=True)
+    
+    for i, (cantidad, fecha) in enumerate(registros, 1):
+        agenda = fecha.strftime("%d/%m/%Y %H:%M")
+        if cantidad > 0:
+            linea = f"{i}. Ingreso: +${cantidad:,.2f} | {agenda}\n"
+        else:
+            linea = f"{i}. Retiro:  -${abs(cantidad):,.2f} | {agenda}\n"
+        texto.insert(tk.END, linea)
+    
+    texto.config(state="disabled")
+    
+    tk.Label(ventana_elim, text="Número del movimiento:", font=("Arial", 11)).pack(pady=5)
+    entry_num = tk.Entry(ventana_elim, width=10, justify="center")
+    entry_num.pack(pady=5)
+    
+    def borrar_seleccionado():
+        try:
+            num = int(entry_num.get())
+            if 1 <= num <= len(registros):
+                eliminado = registros.pop(num - 1)
+                if eliminado[0] > 0:
+                    global monto
+                    monto -= eliminado[0]  # restar el ingreso que se elimina
+                else:
+                    monto += abs(eliminado[0])  # sumar de vuelta el retiro eliminado
+                actualizar_saldo()
+                guardar_datos()
+                messagebox.showinfo("Éxito", "Movimiento eliminado correctamente.")
+                ventana_elim.destroy()
+            else:
+                messagebox.showwarning("Error", "Número fuera de rango.")
+        except ValueError:
+            messagebox.showerror("Error", "Ingresa un número válido.")
+    
+    tk.Button(ventana_elim, text="Eliminar seleccionado", bg="#dc3545", fg="white", 
+              command=borrar_seleccionado).pack(pady=15)
+    
+def borrar_todo():
+    global monto, registros
+    if not registros and monto == 0:
+        messagebox.showinfo("Información", "No hay datos para borrar.")
+        return
+    
+    if not pedir_contrasena():
+        return
+    
+    if messagebox.askyesno("Confirmar", "¿Realmente quieres borrar TODOS los movimientos y poner saldo en 0?"):
+        monto = 0.0
+        registros = []
+        actualizar_saldo()
+        guardar_datos()
+        messagebox.showinfo("Éxito", "Todo ha sido borrado.")
+
 def salir():
     if messagebox.askyesno("Salir", "¿Seguro que quieres salir?"):
         guardar_datos()
@@ -125,7 +225,7 @@ def iniciar_contador():
     
     ventana = tk.Tk()
     ventana.title("Contador Personal")
-    ventana.geometry("420x450")
+    ventana.geometry("420x550")
     ventana.configure(bg="#f8f9fa")
     
     # Cargar datos guardados
@@ -147,7 +247,12 @@ def iniciar_contador():
     tk.Button(frame_botones, text="3. Retirar",   font=("Arial", 11, "bold"), bg="#dc3545", fg="white", width=14, command=retirar).grid(row=0, column=1, padx=10, pady=8)
     tk.Button(frame_botones, text="2. Ver reporte", font=("Arial", 11, "bold"), bg="#6c757d", fg="white", width=14, command=ver_movimientos).grid(row=1, column=0, columnspan=2, pady=8)
     tk.Button(frame_botones, text="4. Salir",     font=("Arial", 11, "bold"), bg="#343a40", fg="white", width=14, command=salir).grid(row=2, column=0, columnspan=2, pady=8)
-    
+    tk.Button(frame_botones, text="Eliminar movimiento", font=("Arial", 11, "bold"), 
+          bg="#ff9800", fg="white", width=20, command=eliminar_movimiento)\
+    .grid(row=3, column=0, columnspan=2, pady=8)
+    tk.Button(frame_botones, text="Borrar todo", font=("Arial", 11, "bold"), 
+          bg="#f44336", fg="white", width=20, command=borrar_todo)\
+    .grid(row=4, column=0, columnspan=2, pady=8)
     actualizar_saldo()
     ventana.protocol("WM_DELETE_WINDOW", salir)  # guarda si cierra con la X
     ventana.mainloop()
