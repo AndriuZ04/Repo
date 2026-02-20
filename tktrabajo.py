@@ -2,16 +2,16 @@ from datetime import datetime
 import tkinter as tk
 from tkinter import messagebox
 
-# ── Tus variables y función principal (casi sin tocar) ──
+# Variables y función principal
 registros = []
 monto = 0.0
 
 def registrar_movimiento(cantidad):
     fecha = datetime.now()
     registros.append((cantidad, fecha))
-    # return fecha   ← lo comentamos porque en la GUI no lo usamos directamente
+    # return fecha   
 
-# ── Funciones para los botones ──
+# Funciones para los botones
 
 def actualizar_saldo():
     label_saldo.config(text=f"Saldo actual: ${monto:,.2f}")
@@ -76,7 +76,7 @@ def ver_movimientos():
     texto_widget.config(state="disabled")
     texto_widget.pack(padx=15, pady=10, fill="both", expand=True)
 
-# ── Ventana principal ──
+# Ventana principal 
 ventana = tk.Tk()
 ventana.title("Contador Personal")
 ventana.geometry("420x450")
@@ -85,11 +85,11 @@ ventana.configure(bg="#f8f9fa")
 # Título
 tk.Label(ventana, text="Bienvenido a su contador", font=("Arial", 16, "bold"), bg="#f8f9fa").pack(pady=15)
 
-# Saldo (muy visible)
+# Saldo
 label_saldo = tk.Label(ventana, text=f"Saldo actual: ${monto:,.2f}", font=("Arial", 18, "bold"), fg="#0066cc", bg="#f8f9fa")
 label_saldo.pack(pady=20)
 
-# Entrada de monto (se usa tanto para ingreso como retiro)
+# Entrada de monto
 tk.Label(ventana, text="Monto:", font=("Arial", 12), bg="#f8f9fa").pack()
 entry_monto = tk.Entry(ventana, font=("Arial", 14), width=15, justify="center")
 entry_monto.pack(pady=10)
