@@ -244,13 +244,13 @@ def iniciar_contador():
     frame_botones.pack(pady=20)
     
     tk.Button(frame_botones, text="1. Ingresar", font=("Arial", 11, "bold"), bg="#28a745", fg="white", width=14, command=ingresar).grid(row=0, column=0, padx=10, pady=8)
-    tk.Button(frame_botones, text="3. Retirar",   font=("Arial", 11, "bold"), bg="#dc3545", fg="white", width=14, command=retirar).grid(row=0, column=1, padx=10, pady=8)
-    tk.Button(frame_botones, text="2. Ver reporte", font=("Arial", 11, "bold"), bg="#6c757d", fg="white", width=14, command=ver_movimientos).grid(row=1, column=0, columnspan=2, pady=8)
+    tk.Button(frame_botones, text="2. Retirar",   font=("Arial", 11, "bold"), bg="#dc3545", fg="white", width=14, command=retirar).grid(row=0, column=1, padx=10, pady=8)
+    tk.Button(frame_botones, text="3. Ver reporte", font=("Arial", 11, "bold"), bg="#6c757d", fg="white", width=14, command=ver_movimientos).grid(row=1, column=0, columnspan=2, pady=8)
     tk.Button(frame_botones, text="4. Salir",     font=("Arial", 11, "bold"), bg="#343a40", fg="white", width=14, command=salir).grid(row=2, column=0, columnspan=2, pady=8)
-    tk.Button(frame_botones, text="Eliminar movimiento", font=("Arial", 11, "bold"), 
+    tk.Button(frame_botones, text="5. Eliminar movimiento", font=("Arial", 11, "bold"), 
           bg="#ff9800", fg="white", width=20, command=eliminar_movimiento)\
     .grid(row=3, column=0, columnspan=2, pady=8)
-    tk.Button(frame_botones, text="Borrar todo", font=("Arial", 11, "bold"), 
+    tk.Button(frame_botones, text="6. Borrar todo", font=("Arial", 11, "bold"), 
           bg="#f44336", fg="white", width=20, command=borrar_todo)\
     .grid(row=4, column=0, columnspan=2, pady=8)
     actualizar_saldo()
